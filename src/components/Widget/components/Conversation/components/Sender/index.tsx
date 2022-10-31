@@ -132,6 +132,8 @@ function Sender({
   const handleFileInput = (files: { source: string }[] = []) => {
     console.log('hello', files);
   };
+
+  console.log('is this working')
   
   return (
     <div ref={refContainer} className="rcw-sender">
