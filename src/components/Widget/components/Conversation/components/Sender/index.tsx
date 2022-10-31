@@ -130,7 +130,7 @@ function Sender({
     checkSize();
   }
   const handleFileInput = (files: { source: string }[] = []) => {
-    sendMessage(`hello`);
+    console.log('hello', files);
   };
   
   return (
