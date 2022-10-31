@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Chat web widget for React apps",
   "repository": "git@github.com:Wintjen/react-chat-widget.git",
-  "author": "Martín Callegari <drew@morphdev.co>",
+  "author": "Drew Wintjen <drew@morphdev.co>",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
