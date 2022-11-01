@@ -23,7 +23,7 @@ type Props = {
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setImageFile: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function Sender({

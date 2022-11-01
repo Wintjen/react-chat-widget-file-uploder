@@ -35,7 +35,7 @@ type Props = {
   handleSubmit?: AnyFunction;
   showBadge?: boolean;
   resizable?: boolean;
-  setImageFile?: (p: string) => void;
+  setImageFile: (p: string) => void;
   sendImageFile: (p: string) => void;
 } & typeof defaultProps;
 
@@ -69,7 +69,7 @@ function ConnectedWidget({
   emojis,
   sendImageFile,
 }: Props) {
-  const [imageFile, setImageFile] = useState<string>()
+  const [imageFile, setImageFile] = useState<string>('')
 
   useEffect(() => {
     sendImageFile(imageFile)

@@ -6,7 +6,7 @@ import './style.scss';
 
 type Props = {
   onClick: (e: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setImageFile: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
@@ -15,7 +15,9 @@ export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
   useEffect(() => {
     if (files.length) {
       onClick(files);
-      setImageFile(files[0].source)
+      if (files[0].source) {
+        setImageFile(files[0].source)
+      }
     }
   }, [files]);
   

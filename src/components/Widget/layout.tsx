@@ -41,7 +41,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
-  setImageFile: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setImageFile: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function WidgetLayout({
