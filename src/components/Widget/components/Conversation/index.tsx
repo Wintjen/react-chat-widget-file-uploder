@@ -36,6 +36,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
+  setImageFile: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 function Conversation({
@@ -59,6 +60,7 @@ function Conversation({
   emojis,
   isShowFileUploader = false,
   isShowEmoji = true,
+  setImageFile,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   let startX, startWidth;
@@ -140,6 +142,7 @@ function Conversation({
         buttonAlt={sendButtonAlt}
         onPressEmoji={togglePicker}
         onChangeSize={setOffset}
+        setImageFile={setImageFile}
       />
     </div>
   );
