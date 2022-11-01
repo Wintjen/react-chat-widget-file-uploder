@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import Widget from './components/Widget';
@@ -36,6 +36,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   setImageFile?: (p: string) => void;
+  sendImageFile: (p: string) => void;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -66,8 +67,13 @@ function ConnectedWidget({
   showBadge,
   resizable,
   emojis,
+  sendImageFile,
 }: Props) {
   const [imageFile, setImageFile] = useState<string>()
+
+  useEffect(() => {
+    sendImageFile(imageFile)
+  }, [imageFile])
   return (
     <Provider store={store}>
       <Widget

@@ -15,7 +15,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
   useEffect(() => {
     if (files.length) {
       onClick(files);
-      setImageFile('howdy')
+      setImageFile(files[0].source)
     }
   }, [files]);
   
