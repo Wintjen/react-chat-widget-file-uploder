@@ -13,6 +13,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
   const [files, selectFiles,] = useUploadFiles();
   
   useEffect(() => {
+    console.log('useEffect in widget')
     if (files.length) {
       onClick(files);
       if (files[0].source) {
