@@ -135,7 +135,7 @@ function Sender({
     console.log('hello', files);
   };
 
-  console.log('is this working')
+  console.log('is this working test')
   
   return (
     <div ref={refContainer} className="rcw-sender">
