@@ -10,6 +10,7 @@ import QuickButtons from './components/QuickButtons';
 import { AnyFunction } from '../../../../utils/types';
 
 import './style.scss';
+import { TFile } from './components/File-Upload/hooks';
 
 interface ISenderRef {
   onSelectEmoji: (event: any) => void;
@@ -36,7 +37,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
-  setImageFile: React.Dispatch<React.SetStateAction<string>>;
+  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 };
 
 function Conversation({

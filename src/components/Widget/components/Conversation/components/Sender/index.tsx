@@ -11,6 +11,7 @@ const brRegex = /<br>/g;
 
 import './style.scss';
 import { FileUpload } from '../File-Upload';
+import { TFile } from '../File-Upload/hooks';
 
 type Props = {
   isShowEmoji: boolean;
@@ -23,7 +24,7 @@ type Props = {
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<string>>;
+  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 }
 
 function Sender({

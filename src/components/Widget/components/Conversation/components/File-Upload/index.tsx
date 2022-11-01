@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 
-import { useUploadFiles } from './hooks';
+import { TFile, useUploadFiles } from './hooks';
 const send = require('../../../../../../../assets/clip.svg') as string;
 import './style.scss';
 
 type Props = {
   onClick: (e: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<string>>;
+  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 };
 
 export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
@@ -17,7 +17,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
     if (files.length) {
       onClick(files);
       if (files[0].source) {
-        setImageFile(files[0].source)
+        setImageFile(files)
       }
     }
   }, [files]);

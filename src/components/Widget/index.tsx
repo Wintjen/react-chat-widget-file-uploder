@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { toggleChat, addUserMessage } from '../../store/actions';
 import { isWidgetOpened } from '../../store/dispatcher';
 import { AnyFunction } from '../../utils/types';
+import { TFile } from './components/Conversation/components/File-Upload/hooks';
 
 import WidgetLayout from './layout';
 
@@ -36,7 +37,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji?: boolean;
   isShowFileUploader?: boolean;
-  setImageFile: React.Dispatch<React.SetStateAction<string>>;
+  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 }
 
 function Widget({

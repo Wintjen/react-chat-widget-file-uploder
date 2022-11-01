@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import Widget from './components/Widget';
+import { TFile } from './components/Widget/components/Conversation/components/File-Upload/hooks';
 
 import store from  './store';
 
@@ -36,7 +37,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   setImageFile: (p: string) => void;
-  sendImageFile: (p: string) => void;
+  sendImageFile: (p: TFile[]) => void;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -69,7 +70,7 @@ function ConnectedWidget({
   emojis,
   sendImageFile,
 }: Props) {
-  const [imageFile, setImageFile] = useState<string>('')
+  const [imageFile, setImageFile] = useState<TFile[]>([])
 
   useEffect(() => {
     sendImageFile(imageFile)
