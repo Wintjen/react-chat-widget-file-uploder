@@ -14,8 +14,7 @@ module.exports = {
     filename: 'index.js',
     library: 'react-chat-widget',
     libraryTarget: 'umd',
-    clean: true,
-    globalObject: 'this',
+    clean: true
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
