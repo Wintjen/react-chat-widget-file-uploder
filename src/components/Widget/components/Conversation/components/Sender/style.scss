@@ -1,8 +1,9 @@
 @import 'variables/colors';
 
 .rcw-sender {
-  align-items: flex-end;
-  background-color: $grey-2;
+  background-color: transparent !important;
+  border-top: 2px #A2C0FC solid;
+  align-items: center !important;
   border-radius: 0 0 10px 10px;
   display: flex;
   height: max-content;
@@ -62,6 +63,14 @@
   .rcw-send-icon {
     height: 25px;
   }
+}
+
+.rcw-send {
+  background-color: transparent !important;
+}
+
+.rcw-picker-btn {
+  display: none;
 }
 
 .rcw-message-disable {

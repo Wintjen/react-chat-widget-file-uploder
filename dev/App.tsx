@@ -36,6 +36,10 @@ export default class App extends Component {
     return true;
   }
 
+  sendImageFile = async (p: any) => {
+    console.log('image')
+  }
+
   render() {
     return (
       <Widget
@@ -47,6 +51,7 @@ export default class App extends Component {
         imagePreview
         handleSubmit={this.handleSubmit}
         emojis
+        sendImageFile={this.sendImageFile}
       />
     );
   }

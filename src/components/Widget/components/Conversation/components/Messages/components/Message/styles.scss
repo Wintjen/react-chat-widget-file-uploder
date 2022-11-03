@@ -27,10 +27,15 @@
 
     white-space: pre-wrap;
     word-wrap: break-word;
+    background-color: #635ec0 !important;
   }
 
   .rcw-timestamp {
     align-self: flex-end;
+  }
+
+  p {
+    color: white !important;
   }
 }
 
@@ -41,6 +46,7 @@
 
   .rcw-message-text {
     @include message-bubble($grey-2);
+    background-color: #DC7B5C66 !important;
   }
 }
 

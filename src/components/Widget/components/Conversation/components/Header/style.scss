@@ -1,16 +1,21 @@
 @import 'variables/colors';
 @import 'common';
 
+$color1: #1F005C;
+
 .rcw-conversation-container {
 
   .rcw-header {
-    background-color: $turqois-1;
+    // background-color: $turqois-1;
+    background: linear-gradient(162deg, rgba(31, 0, 92, .5), rgba(91, 0, 96, .5), rgba(135, 1, 96, .5), rgba(172, 37, 94, .5), rgba(202, 72, 92, .5), rgba(225, 107, 92, .5), rgba(243, 144, 96, .5), rgba(255, 181, 107, .5)) !important;
     border-radius: 10px 10px 0 0;
-    color: $white;
+    color: white !important;
     display: flex;
     flex-direction: column;
     text-align: center;
     padding: 15px 0 25px;
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
   }
 
   .rcw-title {
@@ -44,6 +49,7 @@
 
   .rcw-close-button {
     @include close-button-fs;
+    background-color: transparent !important
   }
 
   .rcw-close {
