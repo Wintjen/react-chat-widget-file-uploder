@@ -3,7 +3,6 @@
 .quick-buttons-container {
   background: $white;
   overflow-x: inherit;
-  white-space: nowrap;
   padding: 10px;
 
   .quick-buttons {
@@ -11,7 +10,7 @@
     padding: 0;
     margin: 0;
     text-align: right;
-    display: inherit;
+    display: grid;
 
     .quick-list-button {
       display: inline-block;
