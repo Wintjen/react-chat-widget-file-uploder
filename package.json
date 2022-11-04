@@ -2,7 +2,10 @@
   "name": "react-chat-widget-custom",
   "version": "1.0.0",
   "description": "Chat web widget for React apps",
-  "repository": "git@github.com:Wintjen/react-chat-widget.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Wintjen/react-chat-widget.git"
+  },
   "author": "Drew Wintjen <drew@morphdev.co>",
   "license": "MIT",
   "main": "lib/index.js",
@@ -114,5 +117,12 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
       "\\.(css|scss)$": "<rootDir>/mocks/styleMock.js"
     }
+  },
+  "bugs": {
+    "url": "https://github.com/Wintjen/react-chat-widget/issues"
+  },
+  "homepage": "https://github.com/Wintjen/react-chat-widget#readme",
+  "directories": {
+    "lib": "lib"
   }
 }
