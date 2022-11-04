@@ -5,6 +5,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './index.js',
@@ -13,6 +14,8 @@ module.exports = {
     filename: 'index.js',
     library: 'react-chat-widget',
     libraryTarget: 'umd',
+    clean: true,
+    globalObject: 'this',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -76,6 +79,14 @@ module.exports = {
      * Known issue for the CSS Extract Plugin in Ubuntu 16.04: You'll need to install
      * the following package: sudo apt-get install libpng16-dev
      */
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'index.d.ts',
+          to: 'index.d.ts'
+        }
+      ]
+    }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
       chunkFilename: '[id].css'
@@ -90,7 +101,13 @@ module.exports = {
       commonjs2: 'react',
       commonjs: 'react',
       amd: 'react'
-    }
+    },
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    },
   },
   optimization: {
     minimizer: [
