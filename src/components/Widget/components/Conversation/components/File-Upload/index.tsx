@@ -23,7 +23,7 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
       <label htmlFor="upload-photo">
         <img src={send} />
       </label>
-      <input accept="image/*" onChange={selectFiles} type="file" multiple name="photo" id="upload-photo" />
+      <input accept="" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
     </div>
   );
 };
