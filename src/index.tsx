@@ -36,8 +36,6 @@ type Props = {
   handleSubmit?: AnyFunction;
   showBadge?: boolean;
   resizable?: boolean;
-  setImageFile: (p: string) => void;
-  sendImageFile: (p: TFile[]) => void;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -68,13 +66,7 @@ function ConnectedWidget({
   showBadge,
   resizable,
   emojis,
-  sendImageFile,
 }: Props) {
-  const [imageFile, setImageFile] = useState<TFile[]>([])
-
-  useEffect(() => {
-    sendImageFile(imageFile)
-  }, [imageFile])
   return (
     <Provider store={store}>
       <Widget
@@ -105,7 +97,6 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
-        setImageFile={setImageFile}
       />
     </Provider>
   );

@@ -6,19 +6,15 @@ import './style.scss';
 
 type Props = {
   onClick: (e: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 };
 
-export const FileUpload: React.FC<Props> = ({ onClick, setImageFile }) => {
+export const FileUpload: React.FC<Props> = ({ onClick }) => {
   const [files, selectFiles,] = useUploadFiles();
   
   useEffect(() => {
     console.log('useEffect in widget')
     if (files.length) {
       onClick(files);
-      if (files[0].source) {
-        setImageFile(files)
-      }
     }
   }, [files]);
   

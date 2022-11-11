@@ -24,12 +24,11 @@ type Props = {
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
-  setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 }
 
 function Sender({
   sendMessage, placeholder, disabledInput, autofocus, onTextInputChange, buttonAlt,
-  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader,setImageFile,
+  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader,
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
   const inputRef = useRef<HTMLDivElement>(null!);
@@ -146,7 +145,7 @@ function Sender({
         </button>
       )}
       {isShowFileUploader && (
-        <FileUpload onClick={handleFileInput} setImageFile={setImageFile} />
+        <FileUpload onClick={handleFileInput} />
       )}
       <div className={cn('rcw-new-message', {
           'rcw-message-disable': disabledInput,
