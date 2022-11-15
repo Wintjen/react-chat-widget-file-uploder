@@ -12,7 +12,7 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
   const [files, selectFiles,] = useUploadFiles();
   
   useEffect(() => {
-    console.log('useEffect in widget')
+    console.log('useEffect in widget', files)
     if (files.length) {
       onClick(files);
     }
@@ -23,7 +23,7 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
       <label htmlFor="upload-photo">
         <img src={send} />
       </label>
-      <input accept="" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
+      <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
     </div>
   );
 };

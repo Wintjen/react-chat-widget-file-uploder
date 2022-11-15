@@ -12,6 +12,10 @@
   }
 }
 
+.rcw-message:has(video)  {
+  flex-direction: row-reverse !important;
+}
+
 .rcw-timestamp {
   font-size: 10px;
   margin-top: 5px;

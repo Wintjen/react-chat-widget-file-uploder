@@ -8,9 +8,7 @@ const validateUploadFiles = async (files: FileList | null): Promise<TFile[]> => 
 	const result: TFile[] = []
 	await [...files].reduce(async (promise, file) => {
 		await promise;
-		if (!file.type.includes('image')) {
-			return;
-		}
+		console.log('files', files)
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		return new Promise((resolve) => {

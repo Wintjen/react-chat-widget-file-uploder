@@ -12,6 +12,7 @@ export default class App extends Component {
   }
 
   handleNewUserMessage = (newMessage: any) => {
+    console.log('new message', newMessage)
     toggleMsgLoader();
     setTimeout(() => {
       toggleMsgLoader();
@@ -48,7 +49,6 @@ export default class App extends Component {
         senderPlaceHolder="Escribe aquí ..."
         handleNewUserMessage={this.handleNewUserMessage}
         handleQuickButtonClicked={this.handleQuickButtonClicked}
-        imagePreview
         handleSubmit={this.handleSubmit}
         emojis
         sendImageFile={this.sendImageFile}

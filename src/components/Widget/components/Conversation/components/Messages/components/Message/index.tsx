@@ -15,6 +15,9 @@ type Props = {
 }
 
 function Message({ message, showTimeStamp }: Props) {
+  if (message.text.includes('data:video')) {
+    return null
+  }
   const sanitizedHTML = markdownIt({ break: true })
     .use(markdownItClass, {
       img: ['rcw-message-img']
@@ -23,6 +26,8 @@ function Message({ message, showTimeStamp }: Props) {
     .use(markdownItSanitizer)
     .use(markdownItLinkAttributes, { attrs: { target: '_blank', rel: 'noopener' } })
     .render(message.text);
+
+    console.log('saniztedHTML', message)
 
   return (
     <div className={`rcw-${message.sender}`}>

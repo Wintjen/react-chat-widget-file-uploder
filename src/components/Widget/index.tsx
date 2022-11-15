@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 
 import { toggleChat, addUserMessage } from '../../store/actions';
-import { isWidgetOpened } from '../../store/dispatcher';
+import { isWidgetOpened, renderCustomComponent } from '../../store/dispatcher';
 import { AnyFunction } from '../../utils/types';
 import { TFile } from './components/Conversation/components/File-Upload/hooks';
 
@@ -79,13 +79,29 @@ function Widget({
     handleToggle ? handleToggle(isWidgetOpened()) : null;
   }
 
+  const sendVideo = ({userInput}) => {
+    return (
+      <video muted controls autoPlay src={userInput} width={'250px'} />
+    )
+  }
+  
+
   const handleMessageSubmit = (userInput) => {
     if (!userInput.trim()) {
       return;
     }
-    handleSubmit?.(userInput);
-    dispatch(addUserMessage(userInput));
-    handleNewUserMessage(userInput);
+    if (userInput.includes('data:video')) { 
+      const id = userInput
+      handleSubmit?.(userInput);
+      dispatch(addUserMessage(userInput));
+      handleNewUserMessage(userInput);
+      const base64Source = userInput.slice(userInput.indexOf('(') + 1, userInput.lastIndexOf(')'))
+      renderCustomComponent(sendVideo, {userInput: base64Source});
+    } else {
+      handleSubmit?.(userInput);
+      dispatch(addUserMessage(userInput));
+      handleNewUserMessage(userInput);
+    }
   }
 
   const onQuickButtonClicked = (event, value) => {
