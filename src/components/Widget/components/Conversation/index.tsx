@@ -37,6 +37,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
+  quickButtonsInMessage?: boolean;
 };
 
 function Conversation({
@@ -60,6 +61,7 @@ function Conversation({
   emojis,
   isShowFileUploader = false,
   isShowEmoji = true,
+  quickButtonsInMessage,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   let startX, startWidth;
@@ -123,8 +125,16 @@ function Conversation({
         profileAvatar={profileAvatar}
         profileClientAvatar={profileClientAvatar}
         showTimeStamp={showTimeStamp}
+        onQuickButtonClicked={onQuickButtonClicked}
+        quickButtonsInMessage={quickButtonsInMessage}
       />
-      <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
+      {console.log(quickButtonsInMessage)}
+      {!quickButtonsInMessage ?
+        <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
+        :
+        null
+      }
+      
       {emojis && pickerStatus && (<Picker
         style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}
         onSelect={onSelectEmoji}

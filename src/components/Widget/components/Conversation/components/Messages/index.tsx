@@ -6,6 +6,8 @@ import { scrollToBottom } from '../../../../../../utils/messages';
 import { MessageTypes, Link, CustomCompMessage, GlobalState } from '../../../../../../store/types';
 import { setBadgeCount, markAllMessagesRead } from '../../../../../../store/actions';
 import { MESSAGE_SENDER } from '../../../../../../constants';
+import QuickButtons from '../QuickButtons';
+import { AnyFunction } from '../../../../../../utils/types';
 
 import Loader from './components/Loader';
 import './styles.scss';
@@ -14,9 +16,11 @@ type Props = {
   showTimeStamp: boolean,
   profileAvatar?: string;
   profileClientAvatar?: string;
+  onQuickButtonClicked?: AnyFunction;
+  quickButtonsInMessage?: boolean;
 }
 
-function Messages({ profileAvatar, profileClientAvatar, showTimeStamp }: Props) {
+function Messages({ profileAvatar, profileClientAvatar, showTimeStamp, onQuickButtonClicked, quickButtonsInMessage }: Props) {
   const dispatch = useDispatch();
   const { messages, typing, showChat, badgeCount } = useSelector((state: GlobalState) => ({
     messages: state.messages.messages,
@@ -68,6 +72,11 @@ function Messages({ profileAvatar, profileClientAvatar, showTimeStamp }: Props) 
         </div>
       )}
       <Loader typing={typing} />
+      {quickButtonsInMessage && quickButtonsInMessage === true ?
+          <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
+        :
+          null
+      }
     </div>
   );
 }

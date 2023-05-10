@@ -42,6 +42,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
+  quickButtonsInMessage?: boolean;
 }
 
 function WidgetLayout({
@@ -73,6 +74,7 @@ function WidgetLayout({
   emojis,
   isShowFileUploader,
   isShowEmoji,
+  quickButtonsInMessage,
 }: Props) {
   const dispatch = useDispatch();
   const { dissableInput, showChat, visible } = useSelector((state: GlobalState) => ({
@@ -154,6 +156,7 @@ function WidgetLayout({
           emojis={emojis}
           isShowFileUploader={isShowFileUploader}
           isShowEmoji={isShowEmoji}
+          quickButtonsInMessage={quickButtonsInMessage}
         />
       }
       {customLauncher ?

@@ -37,6 +37,7 @@ type Props = {
   emojis?: boolean;
   isShowEmoji?: boolean;
   isShowFileUploader?: boolean;
+  quickButtonsInMessage?: boolean;
   // setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 }
 
@@ -70,6 +71,7 @@ function Widget({
   emojis,
   isShowFileUploader = true,
   isShowEmoji = false,
+  quickButtonsInMessage
   // setImageFile,
 }: Props) {
   const dispatch = useDispatch();
@@ -139,6 +141,7 @@ function Widget({
       emojis={emojis}
       isShowFileUploader={isShowFileUploader}
       isShowEmoji={isShowEmoji}
+      quickButtonsInMessage={quickButtonsInMessage}
     />
   );
 }
