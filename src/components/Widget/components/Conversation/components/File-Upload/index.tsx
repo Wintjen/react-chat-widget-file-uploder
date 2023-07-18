@@ -33,7 +33,6 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
 
   
   useEffect(() => {
-    console.log('useEffect in widget', files)
     if (files.length) {
       onClick(files);
     }
@@ -54,7 +53,6 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
     <>
       <ReactModal
         isOpen={isOpen}
-        // onRequestClose={() => setIsOpen(false)}
         style={{
           overlay: {
               zIndex: 9999999999,

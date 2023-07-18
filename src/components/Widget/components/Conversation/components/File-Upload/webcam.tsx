@@ -73,7 +73,6 @@ const Webcam = ({setBlob, setIsOpen, shouldInitializeWebcam, setShouldInitialize
         const saveFile = async () => {
             const blob = await recordWebcam.getRecording();
             if (blob) {
-                console.log('blobby', blob)
                 setShouldInitializeWebcam(false)
                 recordWebcam.close()
                 setBlob(blob)

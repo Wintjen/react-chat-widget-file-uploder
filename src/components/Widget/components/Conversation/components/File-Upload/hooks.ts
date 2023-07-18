@@ -50,10 +50,11 @@ export const useUploadFiles = (): TUseUploadFilesReturn => {
 	}, [files]);
 	const handleBlob = useCallback((blob: Blob) => {
 		(async () => {
-			let file = new File([blob], `${blob.toString()}.mp4`, { type: "video/mp4", lastModified: new Date().getTime() });
+			let day = new Date()
+			let time = new Date().getTime()
+			let file = new File([blob], `${day.toDateString().replaceAll(' ', '_') + time}.mp4`, { type: "video/mp4", lastModified: new Date().getTime() });
 			let container = new DataTransfer();
 			container.items.add(file);
-			console.log('container files', container.files)
 			const uploadFiles = await validateUploadFiles(container.files);
 			setFiles([...uploadFiles])
 		})();
