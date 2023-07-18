@@ -15,7 +15,6 @@ export default class App extends Component {
   handleNewUserMessage = (newMessage: any) => {
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     toggleInputDisabled();
-    console.log('new message', newMessage)
     toggleMsgLoader();
     setTimeout(() => {
       toggleMsgLoader();

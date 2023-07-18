@@ -128,7 +128,6 @@ function Conversation({
         onQuickButtonClicked={onQuickButtonClicked}
         quickButtonsInMessage={quickButtonsInMessage}
       />
-      {console.log(quickButtonsInMessage)}
       {!quickButtonsInMessage ?
         <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
         :

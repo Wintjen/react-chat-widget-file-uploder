@@ -1,6 +1,6 @@
 {
   "name": "react-chat-widget-custom",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Chat web widget for React apps",
   "repository": {
     "type": "git",
@@ -30,6 +30,8 @@
     "markdown-it-link-attributes": "^2.1.0",
     "markdown-it-sanitizer": "^0.4.3",
     "markdown-it-sup": "^1.0.0",
+    "react-modal": "^3.16.1",
+    "react-record-webcam": "^0.0.18",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0"
   },

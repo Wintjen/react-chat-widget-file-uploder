@@ -8,7 +8,6 @@ const validateUploadFiles = async (files: FileList | null): Promise<TFile[]> => 
 	const result: TFile[] = []
 	await [...files].reduce(async (promise, file) => {
 		await promise;
-		console.log('files', files)
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		return new Promise((resolve) => {
@@ -28,6 +27,7 @@ type TUseUploadFilesReturn = [
 	TFile[],
 	(event: { target: HTMLInputElement; }) => void,
 	(index: number) => void,
+	(blob: Blob) => void,
 ];
 
 export type TFile = {
@@ -48,6 +48,16 @@ export const useUploadFiles = (): TUseUploadFilesReturn => {
 		files.splice(index, 1);
 		setFiles([...files]);
 	}, [files]);
+	const handleBlob = useCallback((blob: Blob) => {
+		(async () => {
+			let file = new File([blob], `${blob.toString()}.mp4`, { type: "video/mp4", lastModified: new Date().getTime() });
+			let container = new DataTransfer();
+			container.items.add(file);
+			console.log('container files', container.files)
+			const uploadFiles = await validateUploadFiles(container.files);
+			setFiles([...uploadFiles])
+		})();
+	}, [])
 	
-	return [files, selectFilesWrapper, deleteFile];
+	return [files, selectFilesWrapper, deleteFile, handleBlob];
 };
