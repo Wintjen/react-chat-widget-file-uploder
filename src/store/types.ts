@@ -23,12 +23,14 @@ export type QuickButtonTypes = {
 
 export interface Link extends BaseMessage {
   title: string;
+  linkMask?: string;
   link: string;
   target: string;
 };
 
 export interface LinkParams {
   link: string;
+  linkMask?: string;
   title: string;
   target?: string;
 }

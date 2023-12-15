@@ -16,7 +16,7 @@ function Snippet({ message, showTimeStamp }: Props) {
         <h5 className="rcw-snippet-title">{message.title}</h5>
         <div className="rcw-snippet-details">
           <a href={message.link} target={message.target} className="rcw-link">
-            {message.link}
+            {message.linkMask ?  message.linkMask : message.link}
           </a>
         </div>
       </div>

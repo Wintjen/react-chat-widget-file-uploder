@@ -12,8 +12,8 @@ export function addUserMessage(text: string, id: string): void;
 export function addResponseMessage(text: string): void;
 export function addResponseMessage(text: string, id: string): void;
 
-export function addLinkSnippet(link: { link: string, title: string, target?: string }): void;
-export function addLinkSnippet(link: { link: string, title: string, target?: string }, id: string): void;
+export function addLinkSnippet(link: { link: string, title: string, target?: string, linkMask?: string }): void;
+export function addLinkSnippet(link: { link: string, title: string, target?: string, linkMask?: string }, id: string): void;
 
 export function renderCustomComponent(component: ElementType, props: any): void;
 export function renderCustomComponent(component: ElementType, props: any, showAvatar: boolean): void;

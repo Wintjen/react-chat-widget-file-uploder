@@ -31,6 +31,7 @@ export function createLinkSnippet(link: LinkParams, id?: string) : Link {
     component: Snippet,
     title: link.title,
     link: link.link,
+    linkMask: link.linkMask,
     target: link.target || '_blank',
     sender: MESSAGE_SENDER.RESPONSE,
     timestamp: new Date(),
