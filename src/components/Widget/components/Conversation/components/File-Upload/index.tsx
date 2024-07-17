@@ -74,11 +74,14 @@ export const FileUpload: React.FC<Props> = ({ onClick }) => {
         </label>
         <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
       </div>
-      <div className="image-capture">
-        <label htmlFor="upload-capture" onClick={() => {setIsOpen(true); setShouldInitializeWebcam(true)}}>
-          <img src={capture} />
-        </label>
-      </div>
+      {!isMobile ? 
+        <div className="image-capture">
+          <label htmlFor="upload-capture" onClick={() => {setIsOpen(true); setShouldInitializeWebcam(true)}}>
+            <img src={capture} />
+          </label>
+        </div>
+      :null}
+      
       {isMobile ? (
           <>
             <div className="image-capture">
