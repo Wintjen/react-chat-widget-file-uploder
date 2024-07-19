@@ -5,7 +5,7 @@ import { addUserMessage } from '..';
 
 export default class App extends Component {
   componentDidMount() {
-    addResponseMessage('Welcome to this awesome chat!');
+    addResponseMessage('Welcome to this awesome chat! \r more text here \n and even more text');
     addLinkSnippet({ link: 'https://google.com', linkMask: "mask the link with text", title: 'Google' });
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     addResponseMessage('![](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)');
@@ -47,13 +47,15 @@ export default class App extends Component {
     return (
       <Widget
         quickButtonsInMessage={true}
+        isShowEmoji={true}
+        emojis
         title="Bienvenido"
         subtitle="Asistente virtual"
         senderPlaceHolder="Escribe aquí ..."
         handleNewUserMessage={this.handleNewUserMessage}
         handleQuickButtonClicked={this.handleQuickButtonClicked}
         handleSubmit={this.handleSubmit}
-        emojis
+        // emojis
         sendImageFile={this.sendImageFile}
       />
     );

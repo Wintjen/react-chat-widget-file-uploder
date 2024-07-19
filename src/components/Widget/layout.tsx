@@ -83,6 +83,7 @@ function WidgetLayout({
     visible: state.preview.visible,
   }));
 
+
   const messageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

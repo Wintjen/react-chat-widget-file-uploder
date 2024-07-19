@@ -70,7 +70,7 @@ function Widget({
   resizable,
   emojis,
   isShowFileUploader = true,
-  isShowEmoji = false,
+  isShowEmoji = true,
   quickButtonsInMessage
   // setImageFile,
 }: Props) {

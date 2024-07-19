@@ -55,7 +55,8 @@
 }
 
 .rcw-send, .rcw-picker-btn {
-  background: $grey-2;
+  // background: $grey-2;
+  background: white;
   border: 0;
   cursor: pointer;
 
@@ -68,9 +69,9 @@
   background-color: transparent !important;
 }
 
-.rcw-picker-btn {
-  display: none;
-}
+// .rcw-picker-btn {
+//   display: none;
+// }
 
 .rcw-message-disable {
   background-color: $grey-2;
