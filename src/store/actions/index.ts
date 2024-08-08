@@ -9,9 +9,10 @@ export function toggleChat(): actionsTypes.ToggleChat {
   };
 }
 
-export function toggleInputDisabled(): actionsTypes.ToggleInputDisabled {
+export function toggleInputDisabled(value: boolean): actionsTypes.ToggleInputDisabled {
   return {
-    type: actionsTypes.TOGGLE_INPUT_DISABLED
+    type: actionsTypes.TOGGLE_INPUT_DISABLED,
+    value
   };
 }
 
@@ -31,7 +32,7 @@ export function addResponseMessage(text: string, id?: string): actionsTypes.AddR
   };
 }
 
-export function toggleMsgLoader(): actionsTypes.ToggleMsgLoader {
+export function toggleMsgLoader(value?: boolean): actionsTypes.ToggleMsgLoader {
   return {
     type: actionsTypes.TOGGLE_MESSAGE_LOADER
   }

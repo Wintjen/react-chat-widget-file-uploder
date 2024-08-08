@@ -28,8 +28,8 @@ export function toggleWidget() {
   store.dispatch(actions.toggleChat());
 }
 
-export function toggleInputDisabled() {
-  store.dispatch(actions.toggleInputDisabled());
+export function toggleInputDisabled(value: boolean) {
+  store.dispatch(actions.toggleInputDisabled(value));
 }
 
 export function dropMessages() {

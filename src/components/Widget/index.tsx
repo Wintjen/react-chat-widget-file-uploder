@@ -38,6 +38,7 @@ type Props = {
   isShowEmoji?: boolean;
   isShowFileUploader?: boolean;
   quickButtonsInMessage?: boolean;
+  isNumeric?: boolean;
   // setImageFile: React.Dispatch<React.SetStateAction<TFile[]>>;
 }
 
@@ -71,7 +72,8 @@ function Widget({
   emojis,
   isShowFileUploader = true,
   isShowEmoji = true,
-  quickButtonsInMessage
+  quickButtonsInMessage,
+  isNumeric
   // setImageFile,
 }: Props) {
   const dispatch = useDispatch();
@@ -83,7 +85,7 @@ function Widget({
 
   const sendVideo = ({userInput}) => {
     return (
-      <video muted controls autoPlay src={userInput} width={'250px'} />
+      <video id={'user-video'} muted controls autoPlay src={userInput} width={'250px'} />
     )
   }
   
@@ -142,6 +144,7 @@ function Widget({
       isShowFileUploader={isShowFileUploader}
       isShowEmoji={isShowEmoji}
       quickButtonsInMessage={quickButtonsInMessage}
+      isNumeric={isNumeric}
     />
   );
 }

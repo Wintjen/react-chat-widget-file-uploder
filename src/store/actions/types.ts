@@ -24,6 +24,7 @@ export interface ToggleChat {
 
 export interface ToggleInputDisabled {
   type: typeof TOGGLE_INPUT_DISABLED;
+  value: boolean
 }
 
 export interface AddUserMessage {

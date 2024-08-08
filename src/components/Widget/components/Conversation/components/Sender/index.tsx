@@ -13,6 +13,9 @@ import './style.scss';
 import { FileUpload } from '../File-Upload';
 import { TFile } from '../File-Upload/hooks';
 
+import toast, { Toaster } from 'react-hot-toast';
+
+
 type Props = {
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
@@ -24,11 +27,12 @@ type Props = {
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
+  isNumeric?: boolean;
 }
 
 function Sender({
   sendMessage, placeholder, disabledInput, autofocus, onTextInputChange, buttonAlt,
-  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader,
+  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
   const inputRef = useRef<HTMLDivElement>(null!);
@@ -73,6 +77,16 @@ function Sender({
 
   const handlerOnKeyPress = (event) => {
     const el = inputRef.current;
+    
+    if (isNumeric) {
+      const charCode = event.which ? event.which : event.keyCode;
+      const char = String.fromCharCode(charCode);
+      const regex = /^\d*(\.\d*)?$/;
+  
+      if (!regex.test(char)) {
+        event.preventDefault();
+      }
+    }
 
     if(event.charCode == 13 && !event.shiftKey) {
       event.preventDefault()
@@ -133,9 +147,10 @@ function Sender({
   const handleFileInput = (files: { source: string }[] = []) => {
     files.forEach((file) => sendMessage(`![](${file.source})`));
   };
-  
+
   return (
     <div ref={refContainer} className="rcw-sender">
+      <Toaster />
       {isShowEmoji && (
         <button className='rcw-picker-btn' type="submit" onClick={handlerPressEmoji}>
           <img src={emoji} className="rcw-picker-icon" alt="" />
@@ -148,12 +163,14 @@ function Sender({
           'rcw-message-disable': disabledInput,
         })
       }>
+
         <div
           spellCheck
           className="rcw-input"
           role="textbox"
           contentEditable={!disabledInput}
           ref={inputRef}
+          onPaste={(e) => {e.preventDefault(); toast('Pasting is disabled')}}
           placeholder={placeholder}
           onInput={handlerOnChange}
           onKeyPress={handlerOnKeyPress}

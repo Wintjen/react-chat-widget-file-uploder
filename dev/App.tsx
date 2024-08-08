@@ -10,11 +10,15 @@ export default class App extends Component {
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     addResponseMessage('![](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)');
     addResponseMessage('![vertical](https://d2sofvawe08yqg.cloudfront.net/reintroducing-react/hero2x?1556470143)');
+    toggleInputDisabled(true)
+    setTimeout(() => {
+      toggleInputDisabled(false)
+    }, 3000)
   }
 
   handleNewUserMessage = (newMessage: any) => {
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
-    toggleInputDisabled();
+    // toggleInputDisabled();
     toggleMsgLoader();
     setTimeout(() => {
       toggleMsgLoader();
@@ -56,6 +60,7 @@ export default class App extends Component {
         handleQuickButtonClicked={this.handleQuickButtonClicked}
         handleSubmit={this.handleSubmit}
         // emojis
+        isNumeric={true}
         sendImageFile={this.sendImageFile}
       />
     );

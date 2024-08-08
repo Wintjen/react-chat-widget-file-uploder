@@ -37,6 +37,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   quickButtonsInMessage?: boolean;
+  isNumeric?: boolean;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -68,6 +69,7 @@ function ConnectedWidget({
   resizable,
   emojis,
   quickButtonsInMessage,
+  isNumeric
 }: Props) {
   return (
     <Provider store={store}>
@@ -100,6 +102,7 @@ function ConnectedWidget({
         resizable={resizable}
         emojis={emojis}
         quickButtonsInMessage={quickButtonsInMessage}
+        isNumeric={isNumeric}
       />
     </Provider>
   );

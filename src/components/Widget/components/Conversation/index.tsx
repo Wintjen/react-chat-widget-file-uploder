@@ -38,6 +38,7 @@ type Props = {
   isShowEmoji: boolean;
   isShowFileUploader: boolean;
   quickButtonsInMessage?: boolean;
+  isNumeric?: boolean;
 };
 
 function Conversation({
@@ -62,6 +63,7 @@ function Conversation({
   isShowFileUploader = false,
   isShowEmoji = true,
   quickButtonsInMessage,
+  isNumeric
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   let startX, startWidth;
@@ -150,6 +152,7 @@ function Conversation({
         buttonAlt={sendButtonAlt}
         onPressEmoji={togglePicker}
         onChangeSize={setOffset}
+        isNumeric={isNumeric}
       />
     </div>
   );

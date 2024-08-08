@@ -12,7 +12,7 @@
   }
 }
 
-.rcw-message:has(video)  {
+.rcw-message:has(#user-video)  {
   flex-direction: row-reverse !important;
 }
 
