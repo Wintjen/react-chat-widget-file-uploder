@@ -6830,6 +6830,11 @@ markdown-it-sup@^1.0.0:
   resolved "https://registry.npmjs.org/markdown-it-sup/-/markdown-it-sup-1.0.0.tgz"
   integrity sha1-y5yf+RpSVawI8/09YyhuFd8KH8M=
 
+markdown-it-underline@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-underline/-/markdown-it-underline-1.0.1.tgz#43a54a541d95d739b43157701f1da306d7c300b2"
+  integrity sha512-J597ni39vPHIH1ONVZoDvQKUUXkOqoB93bm6Fc/5Deu6XaWMXrT0xf2m2r9qZCA8dncWJ5V8d5PyGkpmQuy/vg==
+
 markdown-it@^8.4.1:
   version "8.4.2"
   resolved "https://registry.npmjs.org/markdown-it/-/markdown-it-8.4.2.tgz"

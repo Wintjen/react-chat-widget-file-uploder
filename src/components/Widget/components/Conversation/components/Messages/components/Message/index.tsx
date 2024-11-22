@@ -4,6 +4,7 @@ import markdownItSup from 'markdown-it-sup';
 import markdownItSanitizer from 'markdown-it-sanitizer';
 import markdownItClass from '@toycode/markdown-it-class';
 import markdownItLinkAttributes from 'markdown-it-link-attributes';
+import markdownItUnderline from 'markdown-it-underline';
 
 import { MessageTypes } from 'src/store/types';
 
@@ -22,6 +23,7 @@ function Message({ message, showTimeStamp }: Props) {
     .use(markdownItClass, {
       img: ['rcw-message-img']
     })
+    .use(markdownItUnderline)
     .use(markdownItSup)
     .use(markdownItSanitizer)
     .use(markdownItLinkAttributes, { attrs: { target: '_blank', rel: 'noopener' } })

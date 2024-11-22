@@ -5,7 +5,7 @@ import { addUserMessage } from '..';
 
 export default class App extends Component {
   componentDidMount() {
-    addResponseMessage('Welcome to this awesome chat! \r more text here \n and even more text');
+    addResponseMessage('*Welcome* to **this** _awesome_  chat! \r more text here \n and even more text');
     addLinkSnippet({ link: 'https://google.com', linkMask: "mask the link with text", title: 'Google' });
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     addResponseMessage('![](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)');
