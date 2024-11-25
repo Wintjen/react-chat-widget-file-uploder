@@ -1,3 +1,4 @@
+import React from 'react';
 import { QuickButtonTypes } from 'src/store/types';
 import './styles.scss';
 

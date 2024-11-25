@@ -1,3 +1,4 @@
+import React from 'react';
 import {useRef, useEffect, useState, forwardRef, useImperativeHandle, MouseEventHandler} from 'react';
 import { useSelector } from 'react-redux';
 import cn from 'classnames';
@@ -28,11 +29,13 @@ type Props = {
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
   isNumeric?: boolean;
+  screenRecording: boolean;
+  setScreenRecording: (e: boolean) => void;
 }
 
 function Sender({
   sendMessage, placeholder, disabledInput, autofocus, onTextInputChange, buttonAlt,
-  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric
+  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric, screenRecording, setScreenRecording
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
   const inputRef = useRef<HTMLDivElement>(null!);
@@ -157,7 +160,11 @@ function Sender({
         </button>
       )}
       {isShowFileUploader && (
-        <FileUpload onClick={handleFileInput} />
+        <FileUpload 
+          onClick={handleFileInput} 
+          screenRecording={screenRecording} 
+          setScreenRecording={setScreenRecording} 
+        />
       )}
       <div className={cn('rcw-new-message', {
           'rcw-message-disable': disabledInput,

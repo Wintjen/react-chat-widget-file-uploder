@@ -1,7 +1,7 @@
+import React from 'react';
 import { Component } from 'react';
-
 import { Widget, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSnippet, toggleInputDisabled } from '../index';
-import { addUserMessage } from '..';
+import { addUserMessage } from '../index';
 
 export default class App extends Component {
   componentDidMount() {

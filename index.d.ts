@@ -4,7 +4,7 @@
 
 import { ElementType } from 'react';
 
-declare const Widget: ElementType;
+declare const Widget: React.ComponentType<any>;
 
 export function addUserMessage(text: string): void;
 export function addUserMessage(text: string, id: string): void;
@@ -33,3 +33,7 @@ export function markAllAsRead(): void;
 export function setBadgeCount(count: number): void;
 
 export as namespace ReactChatWidget;
+
+// declare module 'react-chat-widget-custom' {
+//     export const Widget: React.ComponentType<any>;
+// }

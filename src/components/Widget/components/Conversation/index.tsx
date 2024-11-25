@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { Picker } from 'emoji-mart';
 import cn from 'classnames';
@@ -66,6 +67,7 @@ function Conversation({
   isNumeric
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
+  const [screenRecording, setScreenRecording] = useState(false);
   let startX, startWidth;
 
   useEffect(() => {
@@ -153,6 +155,8 @@ function Conversation({
         onPressEmoji={togglePicker}
         onChangeSize={setOffset}
         isNumeric={isNumeric}
+        screenRecording={screenRecording}
+        setScreenRecording={setScreenRecording}
       />
     </div>
   );
