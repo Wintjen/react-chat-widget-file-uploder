@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './index.js',
@@ -28,8 +28,15 @@ module.exports = {
     module: {
         rules: [{
                 test: /\.ts(x?)$/,
-                exclude: [/node_modules/, /dev/],
-                use: ['babel-loader', 'ts-loader']
+                exclude: [/node_modules/], // Simplified exclude
+                use: [{
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-typescript']
+                        }
+                    },
+                    'ts-loader'
+                ]
             },
             {
                 enforce: 'pre',
@@ -100,9 +107,8 @@ module.exports = {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true
+            new TerserPlugin({
+                // your options here
             }),
             new OptimizeCSSAssetsPlugin({})
         ]

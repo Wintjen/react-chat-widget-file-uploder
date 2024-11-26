@@ -39,7 +39,7 @@ function Messages({ profileAvatar, profileClientAvatar, showTimeStamp, onQuickBu
   }, [messages, badgeCount, showChat]);
     
   const getComponentToRender = (message: MessageTypes | Link | CustomCompMessage) => {
-    const ComponentToRender = message.component;
+    const ComponentToRender = message.component as any;
     if (message.type === 'component') {
       return <ComponentToRender {...message.props} />;
     }
