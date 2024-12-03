@@ -15,6 +15,7 @@ import { FileUpload } from '../File-Upload';
 import { TFile } from '../File-Upload/hooks';
 
 import toast, { Toaster } from 'react-hot-toast';
+import { Tooltip } from 'react-tooltip';
 
 
 type Props = {
@@ -35,7 +36,7 @@ type Props = {
 
 function Sender({
   sendMessage, placeholder, disabledInput, autofocus, onTextInputChange, buttonAlt,
-  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric, screenRecording, setScreenRecording
+  onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric, screenRecording, setScreenRecording,
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
   const inputRef = useRef<HTMLDivElement>(null!);
@@ -155,8 +156,9 @@ function Sender({
     <div ref={refContainer} className="rcw-sender">
       <Toaster />
       {isShowEmoji && (
-        <button className='rcw-picker-btn' type="submit" onClick={handlerPressEmoji}>
+        <button className='rcw-picker-btn' type="submit" onClick={handlerPressEmoji} data-tooltip-id="emoji-tooltip">
           <img src={emoji} className="rcw-picker-icon" alt="" />
+          <Tooltip id="emoji-tooltip" content="Add an Emoji" place='top' style={{ zIndex: 9999 }} />
         </button>
       )}
       {isShowFileUploader && (

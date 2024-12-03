@@ -17,8 +17,7 @@ type Props = {
 }
 
 function Message({ message, showTimeStamp }: Props) {
-  console.log('message', message)
-  if (message.text.includes('data:video')) {
+  if (message?.text?.includes('data:video')) {
     return null
   }
   const sanitizedHTML = markdownIt({ break: true })

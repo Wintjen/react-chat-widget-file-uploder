@@ -13,6 +13,7 @@ import './style.scss';
 import Webcam from './webcam'
 import ReactModal from 'react-modal'
 import { ReactMediaRecorder } from 'react-media-recorder'
+import { Tooltip } from 'react-tooltip';
 
 
 type Props = {
@@ -138,23 +139,26 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
         </div>
       </ReactModal>
 
-      <div className="image-upload">
+      <div className="image-upload" data-tooltip-id="upload-photo-tooltip">
         <label htmlFor="upload-photo">
           <img src={send} />
         </label>
+        <Tooltip id="upload-photo-tooltip" content="Upload a Photo or Video" place='top' style={{ zIndex: 9999 }} />
         <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
       </div>
       {!isMobile ? (
         <>
-          <div className="image-capture">
+          <div className="image-capture" data-tooltip-id="capture-tooltip">
             <label htmlFor="upload-capture" onClick={() => {setIsOpen(true); setShouldInitializeWebcam(true)}}>
               <img src={capture} />
             </label>
+            <Tooltip id="capture-tooltip" content="Record a Video" place='top' style={{ zIndex: 9999 }} />
           </div>
-          <div className="screeen-capture">
+          <div className="screeen-capture" data-tooltip-id="screen-capture-tooltip">
             <label htmlFor="screeen-capture" onClick={() => {setScreenRecording(!screenRecording)}}>
               <img src={screenRecordIcon} />
             </label>
+            <Tooltip id="screen-capture-tooltip" content="Record Screen" place='top' style={{ zIndex: 9999 }} />
           </div>
         </>
       ) : null}
