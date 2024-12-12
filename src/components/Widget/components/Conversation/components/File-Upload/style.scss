@@ -37,3 +37,16 @@
         stroke: rgba(185, 201, 218, 1.0);
     }
 }
+
+.screen-recorder-container {
+  video {
+    width: 100%;
+    max-height: 70vh;
+    background-color: #000;
+    margin: 0 auto;
+    display: block;
+    object-fit: contain;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}

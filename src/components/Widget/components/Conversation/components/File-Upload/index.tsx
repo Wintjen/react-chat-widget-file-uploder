@@ -15,11 +15,26 @@ import ReactModal from 'react-modal'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import { Tooltip } from 'react-tooltip';
 
+ReactModal.setAppElement('#root');
 
 type Props = {
   onClick: (e: any) => void;
   screenRecording: boolean;
   setScreenRecording: (e: boolean) => void;
+};
+
+const getSupportedMimeType = () => {
+  const possibleTypes = [
+    'video/webm;codecs=h264',
+    'video/webm',
+    'video/mp4',
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8'
+  ];
+  
+  return possibleTypes.find(type => {
+    return MediaRecorder.isTypeSupported(type);
+  }) || '';
 };
 
 export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScreenRecording }) => {
@@ -62,15 +77,21 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
     fetch(mediaBlobUrl)
       .then(response => response.blob())
       .then(blob => {
-        handleBlob(blob);
+        const mimeType = blob.type || 'video/mp4';
+        const videoBlob = new Blob([blob], { type: mimeType });
+        handleBlob(videoBlob);
+      })
+      .catch(error => {
+        console.error('Error processing video:', error);
       });
-    setScreenRecording(false)
-  }
+    setScreenRecording(false);
+  };
 
   return (
     <>
       <ReactModal
         isOpen={isOpen}
+        ariaHideApp={false}
         style={{
           overlay: {
               zIndex: 9999999999,
@@ -89,6 +110,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
 
       <ReactModal
         isOpen={screenRecording}
+        ariaHideApp={false}
         style={{
           overlay: {
               zIndex: 9999999999,
@@ -98,11 +120,36 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
         <div className="screen-recorder-container">
           <ReactMediaRecorder
             screen
+            mediaRecorderOptions={{
+              mimeType: getSupportedMimeType(),
+              videoBitsPerSecond: 2500000
+            }}
             render={({ status, startRecording, stopRecording, mediaBlobUrl, clearBlobUrl }) => (
               <div>
                 {status === 'stopped' && mediaBlobUrl && (
                   <>
-                    <video src={mediaBlobUrl} controls autoPlay loop />
+                    {/* <video 
+                      src={mediaBlobUrl} 
+                      controls 
+                      autoPlay 
+                      loop 
+                      playsInline
+                      style={{
+                        width: '100%',
+                        maxHeight: '70vh',
+                        backgroundColor: '#000',
+                        display: 'block'
+                      }}
+                      onLoadedMetadata={(e) => {
+                        const video = e.target as HTMLVideoElement;
+                        video.load();
+                        video.play().catch(err => console.log('Playback failed:', err));
+                      }}
+                      onError={(e) => {
+                        const video = e.target as HTMLVideoElement;
+                        console.log('Video error:', video.error);
+                      }}
+                    /> */}
                     <div className="screen-recorder-buttons">
                       <button className="screen-recorder-button clear-recording" onClick={clearBlobUrl}>
                         <img src={trashIcon} alt="Clear Recording" />
