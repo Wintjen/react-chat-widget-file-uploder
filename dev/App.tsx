@@ -1,20 +1,22 @@
 import React from 'react';
 import { Component } from 'react';
-import { Widget as WidgetType, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSnippet, toggleInputDisabled } from '../index';
+import { Widget as WidgetType, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSnippet, toggleInputDisabled, toggleForcedScreenRecorder } from '../index';
 import { addUserMessage } from '../index';
 
 const Widget = WidgetType as any;
 
 export default class App extends Component {
   componentDidMount() {
-    addResponseMessage('*Welcome* to **this** _awesome_  chat! \r more text here \n and even more text');
+    addResponseMessage('Thanks for stopping by!. We have just three questions for you today. These questions will ask you to record your screen while you click around that site and talk about your experience as you go (so you will need to record your screen and allow audio recording as well). To begin, please open another tab or window and visit [CLICK HERE](http://facebook.com) \n\n For the first one of these, please show me your favorite part of the website! Navigate to whichever element you liked the most and record yourself interacting with or using it, and tell me what about it you liked so much. In your voiceover, discuss what about this set it apart from the other elements of the website for you and made it your favorite. ');
     addLinkSnippet({ link: 'https://google.com', linkMask: "mask the link with text", title: 'Google' });
     setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     addResponseMessage('![](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)');
     addResponseMessage('![vertical](https://d2sofvawe08yqg.cloudfront.net/reintroducing-react/hero2x?1556470143)');
     toggleInputDisabled(true)
+    toggleForcedScreenRecorder(true)
     setTimeout(() => {
       toggleInputDisabled(false)
+      toggleForcedScreenRecorder(false)
     }, 3000)
   }
 

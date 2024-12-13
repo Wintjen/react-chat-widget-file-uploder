@@ -32,6 +32,10 @@ export function toggleInputDisabled(value: boolean) {
   store.dispatch(actions.toggleInputDisabled(value));
 }
 
+export function toggleForcedScreenRecorder(value: boolean) {
+  store.dispatch(actions.toggleForcedScreenRecorder(value));
+}
+
 export function dropMessages() {
   store.dispatch(actions.dropMessages());
 }

@@ -16,6 +16,13 @@ export function toggleInputDisabled(value: boolean): actionsTypes.ToggleInputDis
   };
 }
 
+export function toggleForcedScreenRecorder(value: boolean): actionsTypes.ToggleForcedScreenRecorder {
+  return {
+    type: actionsTypes.TOGGLE_FORCED_SCREEN_RECORDER,
+    value
+  };
+}
+
 export function addUserMessage(text: string, id?: string): actionsTypes.AddUserMessage {
   return {
     type: actionsTypes.ADD_NEW_USER_MESSAGE,

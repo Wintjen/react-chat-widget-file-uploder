@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { TFile, useUploadFiles } from './hooks';
 const send = require('../../../../../../../assets/clip.svg') as string;
@@ -14,6 +14,8 @@ import Webcam from './webcam'
 import ReactModal from 'react-modal'
 import { ReactMediaRecorder } from 'react-media-recorder'
 import { Tooltip } from 'react-tooltip';
+import { GlobalState } from '@types';
+import { useSelector } from 'react-redux';
 
 ReactModal.setAppElement('#root');
 
@@ -86,6 +88,17 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
       });
     setScreenRecording(false);
   };
+
+  const forcedScreenRecorder = useSelector((state: GlobalState) => state.behavior.forcedScreenRecorder);
+
+  console.log('forcedScreenRecorder', forcedScreenRecorder);
+
+  const canShowMediaUpload = useMemo(() => {
+    return !forcedScreenRecorder;
+  }, [forcedScreenRecorder]);
+  const canShowCamera = useMemo(() => {
+    return !forcedScreenRecorder;
+  }, [forcedScreenRecorder]);
 
   return (
     <>
@@ -186,21 +199,25 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
         </div>
       </ReactModal>
 
-      <div className="image-upload" data-tooltip-id="upload-photo-tooltip">
-        <label htmlFor="upload-photo">
-          <img src={send} />
-        </label>
-        <Tooltip id="upload-photo-tooltip" content="Upload a Photo or Video" place='top' style={{ zIndex: 9999 }} />
-        <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
-      </div>
+      {canShowMediaUpload && (
+        <div className="image-upload" data-tooltip-id="upload-photo-tooltip">
+          <label htmlFor="upload-photo">
+            <img src={send} />
+          </label>
+          <Tooltip id="upload-photo-tooltip" content="Upload a Photo or Video" place='top' style={{ zIndex: 9999 }} />
+          <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
+        </div>
+      )}
       {!isMobile ? (
         <>
-          <div className="image-capture" data-tooltip-id="capture-tooltip">
-            <label htmlFor="upload-capture" onClick={() => {setIsOpen(true); setShouldInitializeWebcam(true)}}>
-              <img src={capture} />
-            </label>
-            <Tooltip id="capture-tooltip" content="Record a Video" place='top' style={{ zIndex: 9999 }} />
-          </div>
+          {canShowMediaUpload && (
+            <div className="image-capture" data-tooltip-id="capture-tooltip">
+              <label htmlFor="upload-capture" onClick={() => {setIsOpen(true); setShouldInitializeWebcam(true)}}>
+                <img src={capture} />
+              </label>
+              <Tooltip id="capture-tooltip" content="Record a Video" place='top' style={{ zIndex: 9999 }} />
+            </div>
+          )}
           <div className="screeen-capture" data-tooltip-id="screen-capture-tooltip">
             <label htmlFor="screeen-capture" onClick={() => {setScreenRecording(!screenRecording)}}>
               <img src={screenRecordIcon} />
@@ -211,15 +228,17 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
       ) : null}
       
       {isMobile ? (
-          <>
+        <>
+          {canShowCamera && (
             <div className="image-capture">
               <label htmlFor="upload-photo">
                 <img src={capture} />
               </label>
               <input accept="image/*,video/*" capture="environment" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
             </div>
-          </>
-        ):null}
+          )}
+        </>
+      ) : null}
     </>
   );
 };

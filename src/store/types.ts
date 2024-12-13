@@ -42,6 +42,7 @@ export interface CustomCompMessage extends BaseMessage {
 export interface BehaviorState {
   showChat: boolean;
   disabledInput: boolean;
+  forcedScreenRecorder: boolean;
   messageLoader: boolean;
 };
 
