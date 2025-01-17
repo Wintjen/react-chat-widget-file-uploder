@@ -117,7 +117,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
         }}
       >
         <div className="webcam" style={{width: 600, height: 315, margin: 'auto'}}>
-          <Webcam setBlob={setBlob} setIsOpen={updateOpen} shouldInitializeWebcam={shouldInitializeWebcam} setShouldInitializeWebcam={setShouldInitializeWebcam}/>
+          <Webcam open={isOpen} setBlob={setBlob} setIsOpen={updateOpen} shouldInitializeWebcam={shouldInitializeWebcam} setShouldInitializeWebcam={setShouldInitializeWebcam}/>
         </div>
       </ReactModal>
 

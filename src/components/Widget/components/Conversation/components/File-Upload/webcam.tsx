@@ -1,6 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import { RecordWebcam } from 'react-record-webcam'
 import { useRecordWebcam } from 'react-record-webcam'
+import {
+    MediaPermissionsError,
+    MediaPermissionsErrorType,
+    requestMediaPermissions
+  } from 'mic-check'
 
 
 const LoadingIcon = ({status, stop}) => {
@@ -51,18 +56,42 @@ const RecordingIcon = ({status, stop, start}) => {
 }
 
 interface WebcamProps {
+    open: boolean
     setBlob: (blob: Blob) => void
     setIsOpen: () => void
     shouldInitializeWebcam: boolean
     setShouldInitializeWebcam: (bool) => void
 }
 
-const Webcam = ({setBlob, setIsOpen, shouldInitializeWebcam, setShouldInitializeWebcam}: WebcamProps) => {
+const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInitializeWebcam}: WebcamProps) => {
     
     const [isLoading, setIslLoading] = useState(true)
+    const [permissionDenied, setPermissionDenied] = useState(false);
 
-    const RecordVideo = () => {
+    const RecordVideo: React.FC<{open: boolean}> = ({open}) => {
+        useEffect(() => {
+            const openWebcam = async () => {
+                try {
+                    const permission = await requestMediaPermissions()
+
+                    const result = await recordWebcam.open()
+                    console.log('result', result)
+                    setPermissionDenied(false)
+                } catch (err) {
+                    console.log('permission denied error: ', err)
+                    setPermissionDenied(true)
+                }
+            }
+            openWebcam()
+        }, [shouldInitializeWebcam]);
+
+        useEffect(() => {
+            console.log('open', open)
+        }, [])
+
         const recordWebcam = useRecordWebcam({ frameRate: 60, height: 315, width: 560});
+
+        console.log('error message:', recordWebcam)
 
         const exit = () => {
             setIsOpen()
@@ -80,45 +109,64 @@ const Webcam = ({setBlob, setIsOpen, shouldInitializeWebcam, setShouldInitialize
             setIsOpen()
         };
 
-        if (recordWebcam.status === 'CLOSED' && shouldInitializeWebcam) {
-            recordWebcam.open()
-        }
+        // const handleReRequestPermissions = () => {
+        //     console.log('handleReRequestPermissions');
+        //     // Stop the current recording if any
+        //     if (recordWebcam.status === 'OPEN' || recordWebcam.status === 'RECORDING') {
+        //         recordWebcam.stop();
+        //     }
 
+        //     // Re-initialize the webcam to re-request permissions
+        //     recordWebcam.open();
+        // };
 
+        // if (recordWebcam.status === 'CLOSED' && shouldInitializeWebcam) {
+        //     recordWebcam.open()
+        // }
+
+        console.log('recordWebcam.status', recordWebcam.status)
 
         return (
           <div>
                 <div onClick={exit} style={{position: 'absolute', top: 0, right: 0}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="IconChangeColor" height="40" width="40"> <g> <path fill="none" d="M0 0h24v24H0z" id="mainIconPathAttribute"></path> <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9.414l2.828-2.829 1.415 1.415L13.414 12l2.829 2.828-1.415 1.415L12 13.414l-2.828 2.829-1.415-1.415L10.586 12 7.757 9.172l1.415-1.415L12 10.586z" id="mainIconPathAttribute"></path> </g> </svg>
                 </div>
-                <LoadingIcon status={recordWebcam.status} stop={recordWebcam.status === 'OPEN' ? true : false} />
-                <div className="controls">
-                    <video style={recordWebcam.status === 'PREVIEW' ? {display: 'none'} : {display: 'block', height: 315, width: 560}} ref={recordWebcam.webcamRef} autoPlay muted />
-                    <video style={recordWebcam.status === 'PREVIEW' ? {display: 'block', height: 315, width: 560} : {display: 'none'}} ref={recordWebcam.previewRef} autoPlay muted loop />
-                    <div style={recordWebcam.status === 'INIT' ?{display: 'none'} : {display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
-                        <div className="record" onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                            <RecordingIcon status={recordWebcam.status} stop={recordWebcam.status !== 'RECORDING' ? true : false} start={recordWebcam.start} />
+                {permissionDenied ? (
+                    <>
+                        <div style={{color: '#E57373', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px', paddingLeft: 20, paddingRight: 20}}>Webcam permission denied. Please enable webcam access in your browser settings.</div>
+                    </>
+                ) : (
+                    <>
+                        <LoadingIcon status={recordWebcam.status} stop={recordWebcam.status === 'OPEN' ? true : false} />
+                        <div className="controls">
+                            <video style={recordWebcam.status === 'PREVIEW' ? {display: 'none'} : {display: 'block', height: 315, width: 560}} ref={recordWebcam.webcamRef} autoPlay muted />
+                            <video style={recordWebcam.status === 'PREVIEW' ? {display: 'block', height: 315, width: 560} : {display: 'none'}} ref={recordWebcam.previewRef} autoPlay muted loop />
+                            <div style={recordWebcam.status === 'INIT' ?{display: 'none'} : {display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                                <div className="record" onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <RecordingIcon status={recordWebcam.status} stop={recordWebcam.status !== 'RECORDING' ? true : false} start={recordWebcam.start} />
+                                </div>
+                                <div  onClick={recordWebcam.stop} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" className="bi bi-stop-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/> </svg>
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-stop-btn-fill" viewBox="0 0 16 16"> <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.5-7A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z"/> </svg> */}
+                                </div>
+                                <div onClick={recordWebcam.retake} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-skip-start-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M10.229 5.055a.5.5 0 0 0-.52.038L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.271-.445z"/> </svg>
+                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/> <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/> </svg> */}
+                                </div>
+                                <div className="select" style={{marginLeft: '12px'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <button style={{height: '37px'}} className={'quick-button'} onClick={saveFile}>OK</button>    
+                                </div>
+                            </div>
                         </div>
-                        <div  onClick={recordWebcam.stop} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" className="bi bi-stop-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/> </svg>
-                            {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-stop-btn-fill" viewBox="0 0 16 16"> <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.5-7A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z"/> </svg> */}
-                        </div>
-                        <div onClick={recordWebcam.retake} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-skip-start-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M10.229 5.055a.5.5 0 0 0-.52.038L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.271-.445z"/> </svg>
-                            {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/> <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/> </svg> */}
-                        </div>
-                        <div className="select" style={{marginLeft: '12px'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                            <button style={{height: '37px'}} className={'quick-button'} onClick={saveFile}>OK</button>    
-                        </div>
-                    </div>
-                </div>
+                    </>
+                )}
           </div>
         )
       }
 
     return (
         <> 
-            <RecordVideo />
+            <RecordVideo open={open} />
         </>
     )
 
