@@ -7,6 +7,55 @@ import {
     requestMediaPermissions
   } from 'mic-check'
 
+// Define a type for the recordWebcam object
+interface WebcamInstance {
+  status: string;
+  open: () => Promise<any>;
+  close: () => void;
+  start: () => void;
+  stop: () => void;
+  retake: () => void;
+  getRecording: () => Promise<Blob | undefined>;
+  webcamRef: React.RefObject<any>;
+  previewRef: React.RefObject<any>;
+}
+
+// Tooltip component
+const Tooltip = ({ text, children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div 
+      className="tooltip-container" 
+      style={{ position: 'relative', display: 'inline-block' }}
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div 
+          className="tooltip" 
+          style={{
+            position: 'absolute',
+            bottom: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginBottom: '5px',
+            padding: '4px 8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            borderRadius: '4px',
+            fontSize: '12px',
+            whiteSpace: 'nowrap',
+            zIndex: 100,
+          }}
+        >
+          {text}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const LoadingIcon = ({status, stop}) => {
     const [rotation, setRotation] = useState(0);
@@ -67,31 +116,47 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
     
     const [isLoading, setIslLoading] = useState(true)
     const [permissionDenied, setPermissionDenied] = useState(false);
+    // Create a properly typed ref to hold the webcam instance
+    const webcamRef = useRef<WebcamInstance | null>(null);
 
     const RecordVideo: React.FC<{open: boolean}> = ({open}) => {
+        const recordWebcam = useRecordWebcam({ frameRate: 60, height: 315, width: 560});
+        
+        // Store the webcam instance in the ref so we can access it outside the component
+        useEffect(() => {
+            webcamRef.current = recordWebcam as any; // Type assertion to fix type error
+        }, [recordWebcam]);
+
         useEffect(() => {
             const openWebcam = async () => {
                 try {
                     const permission = await requestMediaPermissions()
-
                     const result = await recordWebcam.open()
-                    console.log('result', result)
                     setPermissionDenied(false)
                 } catch (err) {
                     console.log('permission denied error: ', err)
                     setPermissionDenied(true)
                 }
             }
-            openWebcam()
+            if (shouldInitializeWebcam)
+                openWebcam()
         }, [shouldInitializeWebcam]);
 
         useEffect(() => {
             console.log('open', open)
         }, [])
 
-        const recordWebcam = useRecordWebcam({ frameRate: 60, height: 315, width: 560});
-
-        console.log('error message:', recordWebcam)
+        // Add cleanup effect that will run when component unmounts
+        useEffect(() => {
+            // This cleanup function runs when component unmounts
+            return () => {
+                if (recordWebcam.status !== 'CLOSED') {
+                    console.log('Cleaning up webcam on unmount');
+                    recordWebcam.close();
+                    setShouldInitializeWebcam(false);
+                }
+            };
+        }, []); // Empty dependency array means this only runs on mount/unmount
 
         const exit = () => {
             setIsOpen()
@@ -100,13 +165,40 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
         }
 
         const saveFile = async () => {
-            const blob = await recordWebcam.getRecording();
-            if (blob) {
-                setShouldInitializeWebcam(false)
-                recordWebcam.close()
-                setBlob(blob)
+            // If currently recording, stop recording
+            if (recordWebcam.status === 'RECORDING') {
+                recordWebcam.stop();
+                return; // Exit the function - user will need to click OK again after stopping
             }
-            setIsOpen()
+            
+            // Only proceed if we have a recording to save (PREVIEW state)
+            if (recordWebcam.status === 'PREVIEW') {
+                try {
+                    // CRITICAL: First set flag to prevent any reinitialization
+                    setShouldInitializeWebcam(false);
+                    
+                    // Then close the webcam immediately
+                    recordWebcam.close();
+                    
+                    // Only after webcam is closed, get the recording
+                    const blob = await recordWebcam.getRecording();
+                    
+                    if (blob) {
+                        // Finally pass the blob back and close modal
+                        setBlob(blob);
+                        setIsOpen();
+                    } else {
+                        console.error('No recording available');
+                        setIsOpen(); // Still close the modal
+                    }
+                } catch (error) {
+                    console.error('Error saving recording:', error);
+                    setIsOpen(); // Close modal even on error
+                }
+            } else if (recordWebcam.status === 'OPEN') {
+                // If webcam is open but no recording was made
+                alert('Please record something first or close the webcam');
+            }
         };
 
         // const handleReRequestPermissions = () => {
@@ -140,22 +232,35 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
                         <LoadingIcon status={recordWebcam.status} stop={recordWebcam.status === 'OPEN' ? true : false} />
                         <div className="controls">
                             <video style={recordWebcam.status === 'PREVIEW' ? {display: 'none'} : {display: 'block', height: 315, width: 560}} ref={recordWebcam.webcamRef} autoPlay muted />
-                            <video style={recordWebcam.status === 'PREVIEW' ? {display: 'block', height: 315, width: 560} : {display: 'none'}} ref={recordWebcam.previewRef} autoPlay muted loop />
+                            <video style={recordWebcam.status === 'PREVIEW' ? {display: 'block', height: 315, width: 560} : {display: 'none'}} ref={recordWebcam.previewRef} autoPlay muted loop controls/>
                             <div style={recordWebcam.status === 'INIT' ?{display: 'none'} : {display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
                                 <div className="record" onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                                    <RecordingIcon status={recordWebcam.status} stop={recordWebcam.status !== 'RECORDING' ? true : false} start={recordWebcam.start} />
+                                    <Tooltip text={'Start Recording'}>
+                                      <div>
+                                          <RecordingIcon status={recordWebcam.status} stop={recordWebcam.status !== 'RECORDING' ? true : false} start={recordWebcam.start} />
+                                      </div>
+                                    </Tooltip>
                                 </div>
-                                <div  onClick={recordWebcam.stop} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" className="bi bi-stop-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/> </svg>
-                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-stop-btn-fill" viewBox="0 0 16 16"> <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.5-7A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z"/> </svg> */}
-                                </div>
-                                <div onClick={recordWebcam.retake} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-skip-start-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M10.229 5.055a.5.5 0 0 0-.52.038L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.271-.445z"/> </svg>
-                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/> <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/> </svg> */}
-                                </div>
-                                <div className="select" style={{marginLeft: '12px'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                                    <button style={{height: '37px'}} className={'quick-button'} onClick={saveFile}>OK</button>    
-                                </div>
+                                {/* <Tooltip text="Stop Recording">
+                                  <div onClick={recordWebcam.stop} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" className="bi bi-stop-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/> <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/> </svg>
+                                  </div>
+                                </Tooltip> */}
+                                <Tooltip text="Retake Recording">
+                                  <div onClick={recordWebcam.retake} style={{marginLeft: '12px', cursor: 'pointer'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" className="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                                      </svg>
+                                  </div>
+                                </Tooltip>
+                                <Tooltip text={recordWebcam.status === 'RECORDING' ? 'Stop Recording' : 'Save Recording'}>
+                                  <div className="select" style={{marginLeft: '12px'}} onMouseDown={(e) => e.currentTarget.style.transform = 'scale(.9)'} onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                      <button style={{height: '37px'}} className={'quick-button'} onClick={saveFile}>
+                                          {recordWebcam.status === 'RECORDING' ? 'Stop' : 'OK'}
+                                      </button>    
+                                  </div>
+                                </Tooltip>
                             </div>
                         </div>
                     </>
@@ -164,12 +269,23 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
         )
       }
 
+    // Add a cleanup effect at the parent component level
+    useEffect(() => {
+        // Cleanup when parent component unmounts
+        return () => {
+            if (webcamRef.current && webcamRef.current.status !== 'CLOSED') {
+                console.log('Cleaning up webcam on parent unmount');
+                webcamRef.current.close();
+                setShouldInitializeWebcam(false);
+            }
+        };
+    }, []);
+
     return (
         <> 
             <RecordVideo open={open} />
         </>
     )
-
 }
 
 export default Webcam
