@@ -93,8 +93,27 @@ function scrollWithSlowMotion(target: any, scrollStart: any, scroll: number) {
 
 export function scrollToBottom(messagesDiv: HTMLDivElement | null) {
   if (!messagesDiv) return;
-  const screenHeight = messagesDiv.clientHeight;
-  const scrollTop = messagesDiv.scrollTop;
-  const scrollOffset = messagesDiv.scrollHeight - (scrollTop + screenHeight);
-  if (scrollOffset) scrollWithSlowMotion(messagesDiv, scrollTop, scrollOffset);
+  
+  // Find all messages with class 'rcw-message'
+  const messages = messagesDiv.getElementsByClassName('rcw-message');
+  if (messages.length === 0) return;
+  
+  // Find the last message that has a response child
+  let lastResponseMessage: HTMLElement | null = null;
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i] as HTMLElement;
+    if (message.querySelector('.rcw-response')) {
+      lastResponseMessage = message;
+      break;
+    }
+  }
+  
+  if (!lastResponseMessage) return;
+  
+  // Calculate the scroll amount needed to position the last response message below the header
+  const lastMessageTop = lastResponseMessage.offsetTop;
+  const currentScrollTop = messagesDiv.scrollTop;
+  const scrollOffset = lastMessageTop - currentScrollTop - 100; // 81px header + 19px padding
+  
+  if (scrollOffset) scrollWithSlowMotion(messagesDiv, currentScrollTop, scrollOffset);
 }
