@@ -74,7 +74,7 @@ function Widget({
   isShowFileUploader = true,
   isShowEmoji = true,
   quickButtonsInMessage,
-  isNumeric
+  isNumeric,
   // setImageFile,
 }: Props) {
   const dispatch = useDispatch();

@@ -15,7 +15,8 @@ import {
   setQuickButtons,
   deleteMessages,
   markAllAsRead,
-  setBadgeCount
+  setBadgeCount,
+  togglePasteEnabled
 } from './src/store/dispatcher';
 
 export {
@@ -28,6 +29,7 @@ export {
   toggleInputDisabled,
   toggleForcedScreenRecorder,
   toggleMsgLoader,
+  togglePasteEnabled,
   dropMessages,
   isWidgetOpened,
   setQuickButtons,

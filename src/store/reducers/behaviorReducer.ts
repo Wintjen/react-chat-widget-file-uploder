@@ -8,14 +8,17 @@ import {
   TOGGLE_INPUT_DISABLED,
   TOGGLE_FORCED_SCREEN_RECORDER,
   TOGGLE_MESSAGE_LOADER,
-  ToggleForcedScreenRecorder
+  ToggleForcedScreenRecorder,
+  TOGGLE_PASTE_ENABLED,
+  TogglePasteEnabled
 } from '../actions/types';
 
 const initialState = {
   showChat: false,
   disabledInput: false,
   forcedScreenRecorder: false,
-  messageLoader: false
+  messageLoader: false,
+  pasteEnabled: true,
 };
 
 const behaviorReducer = {
@@ -23,6 +26,7 @@ const behaviorReducer = {
 
   [TOGGLE_INPUT_DISABLED]: (state: BehaviorState, toggle: ToggleInputDisabled) => ({ ...state, disabledInput: toggle.value }),
   [TOGGLE_FORCED_SCREEN_RECORDER]: (state: BehaviorState, toggle: ToggleForcedScreenRecorder) => ({ ...state, forcedScreenRecorder: toggle.value }),
+  [TOGGLE_PASTE_ENABLED]: (state: BehaviorState, toggle: TogglePasteEnabled) => ({...state, pasteEnabled: toggle.value}),
 
   [TOGGLE_MESSAGE_LOADER]: (state: BehaviorState) => ({ ...state, messageLoader: !state.messageLoader })
 };

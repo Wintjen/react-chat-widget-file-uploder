@@ -64,7 +64,7 @@ function Conversation({
   isShowFileUploader = false,
   isShowEmoji = true,
   quickButtonsInMessage,
-  isNumeric
+  isNumeric,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   const [screenRecording, setScreenRecording] = useState(false);

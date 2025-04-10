@@ -18,6 +18,7 @@ export const MARK_ALL_READ = 'MESSAGES/MARK_ALL_READ';
 export const SET_QUICK_BUTTONS = 'SET_QUICK_BUTTONS';
 export const OPEN_FULLSCREEN_PREVIEW = 'FULLSCREEN/OPEN_PREVIEW';
 export const CLOSE_FULLSCREEN_PREVIEW = 'FULLSCREEN/CLOSE_PREVIEW';
+export const TOGGLE_PASTE_ENABLED = 'BEHAVIOR/TOGGLE_PASTE_ENABLED';
 
 export interface ToggleChat {
   type: typeof TOGGLE_CHAT;
@@ -31,6 +32,11 @@ export interface ToggleInputDisabled {
 export interface ToggleForcedScreenRecorder {
   type: typeof TOGGLE_FORCED_SCREEN_RECORDER;
   value: boolean
+}
+
+export interface TogglePasteEnabled {
+  type: typeof TOGGLE_PASTE_ENABLED;
+  value: boolean;
 }
 
 export interface AddUserMessage {
@@ -92,7 +98,7 @@ export interface MarkAllMessagesRead {
   type: typeof MARK_ALL_READ;
 }
 
-export type BehaviorActions = ToggleChat | ToggleInputDisabled | ToggleMsgLoader | ToggleForcedScreenRecorder;
+export type BehaviorActions = ToggleChat | ToggleInputDisabled | ToggleMsgLoader | ToggleForcedScreenRecorder | TogglePasteEnabled;
 
 export type MessagesActions = AddUserMessage | AddResponseMessage | AddLinkSnippet | RenderCustomComponent
                               | DropMessages | HideAvatar | DeleteMessages | MarkAllMessagesRead | SetBadgeCount;

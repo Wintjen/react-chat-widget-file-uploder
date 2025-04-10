@@ -28,6 +28,10 @@ export function toggleWidget() {
   store.dispatch(actions.toggleChat());
 }
 
+export function togglePasteEnabled(value: boolean) {
+  store.dispatch(actions.togglePasteEnabled(value));
+}
+
 export function toggleInputDisabled(value: boolean) {
   store.dispatch(actions.toggleInputDisabled(value));
 }

@@ -39,6 +39,7 @@ function Sender({
   onPressEmoji, onChangeSize, isShowEmoji, isShowFileUploader, isNumeric, screenRecording, setScreenRecording,
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
+  const pasteEnabled = useSelector((state: GlobalState) => state.behavior.pasteEnabled);
   const inputRef = useRef<HTMLDivElement>(null!);
   const refContainer = useRef<HTMLDivElement>(null);
   const [enter, setEnter]= useState(false)
@@ -179,7 +180,12 @@ function Sender({
           role="textbox"
           contentEditable={!disabledInput}
           ref={inputRef}
-          onPaste={(e) => {e.preventDefault(); toast('Pasting is disabled')}}
+          onPaste={(e) => {
+            console.log('pasting status', pasteEnabled)
+            if (!pasteEnabled) {
+              e.preventDefault(); toast('Pasting is disabled')
+            }
+          }}
           placeholder={placeholder}
           onInput={handlerOnChange}
           onKeyPress={handlerOnKeyPress}

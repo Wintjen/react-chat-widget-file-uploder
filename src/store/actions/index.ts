@@ -45,6 +45,13 @@ export function toggleMsgLoader(value?: boolean): actionsTypes.ToggleMsgLoader {
   }
 }
 
+export function togglePasteEnabled(value: boolean): actionsTypes.TogglePasteEnabled {
+  return {
+    type: actionsTypes.TOGGLE_PASTE_ENABLED,
+    value
+  }
+}
+
 export function addLinkSnippet(link: LinkParams, id?: string): actionsTypes.AddLinkSnippet {
   return {
     type: actionsTypes.ADD_NEW_LINK_SNIPPET,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import { Widget as WidgetType, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSnippet, toggleInputDisabled, toggleForcedScreenRecorder, toggleWidget } from '../index';
+import { Widget as WidgetType, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSnippet, toggleInputDisabled, toggleForcedScreenRecorder, toggleWidget, togglePasteEnabled } from '../index';
 import { addUserMessage } from '../index';
 
 const Widget = WidgetType as any;
@@ -14,6 +14,7 @@ export default class App extends Component {
     addResponseMessage('![](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)');
     addResponseMessage('![vertical](https://d2sofvawe08yqg.cloudfront.net/reintroducing-react/hero2x?1556470143)');
     // toggleInputDisabled(true)
+    togglePasteEnabled(false)
     toggleForcedScreenRecorder(true)
     setTimeout(() => {
       toggleInputDisabled(false)
@@ -25,6 +26,7 @@ export default class App extends Component {
     // setQuickButtons([ { label: 'Apple', value: 'apple' }, { label: 'Orange', value: 'orange' }, { label: 'Pear', value: 'pear' }, { label: 'Banana', value: 'banana' } ]);
     // toggleInputDisabled();
     toggleMsgLoader();
+    togglePasteEnabled(true)
     setTimeout(() => {
       toggleMsgLoader();
       if (newMessage === 'fruits') {

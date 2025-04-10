@@ -44,6 +44,7 @@ export interface BehaviorState {
   disabledInput: boolean;
   forcedScreenRecorder: boolean;
   messageLoader: boolean;
+  pasteEnabled: boolean;
 };
 
 export interface MessagesState {
