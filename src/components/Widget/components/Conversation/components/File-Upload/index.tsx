@@ -91,8 +91,6 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
 
   const forcedScreenRecorder = useSelector((state: GlobalState) => state.behavior.forcedScreenRecorder);
 
-  console.log('forcedScreenRecorder', forcedScreenRecorder);
-
   const canShowMediaUpload = useMemo(() => {
     return !forcedScreenRecorder;
   }, [forcedScreenRecorder]);

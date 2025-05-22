@@ -139,7 +139,7 @@ function Conversation({
       }
       
       {emojis && pickerStatus && (<Picker
-        style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}
+        style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%', zIndex: '1000' }}
         onSelect={onSelectEmoji}
       />)}
       <Sender

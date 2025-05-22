@@ -134,7 +134,7 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
                     const result = await recordWebcam.open()
                     setPermissionDenied(false)
                 } catch (err) {
-                    console.log('permission denied error: ', err)
+                    console.error('permission denied error: ', err)
                     setPermissionDenied(true)
                 }
             }
@@ -142,16 +142,13 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
                 openWebcam()
         }, [shouldInitializeWebcam]);
 
-        useEffect(() => {
-            console.log('open', open)
-        }, [])
 
         // Add cleanup effect that will run when component unmounts
         useEffect(() => {
             // This cleanup function runs when component unmounts
             return () => {
                 if (recordWebcam.status !== 'CLOSED') {
-                    console.log('Cleaning up webcam on unmount');
+                    // console.log('Cleaning up webcam on unmount');
                     recordWebcam.close();
                     setShouldInitializeWebcam(false);
                 }
@@ -216,7 +213,6 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
         //     recordWebcam.open()
         // }
 
-        console.log('recordWebcam.status', recordWebcam.status)
 
         return (
           <div>
@@ -274,7 +270,7 @@ const Webcam = ({setBlob, open, setIsOpen, shouldInitializeWebcam, setShouldInit
         // Cleanup when parent component unmounts
         return () => {
             if (webcamRef.current && webcamRef.current.status !== 'CLOSED') {
-                console.log('Cleaning up webcam on parent unmount');
+                // console.log('Cleaning up webcam on parent unmount');
                 webcamRef.current.close();
                 setShouldInitializeWebcam(false);
             }

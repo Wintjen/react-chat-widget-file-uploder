@@ -52,6 +52,13 @@ export function togglePasteEnabled(value: boolean): actionsTypes.TogglePasteEnab
   }
 }
 
+export function setMinCharLimit(value: number | null): actionsTypes.SetMinCharLimit {
+  return {
+    type: actionsTypes.SET_MIN_CHAR_LIMIT,
+    value
+  }
+}
+
 export function addLinkSnippet(link: LinkParams, id?: string): actionsTypes.AddLinkSnippet {
   return {
     type: actionsTypes.ADD_NEW_LINK_SNIPPET,

@@ -40,11 +40,13 @@ function Sender({
 }: Props, ref) {
   const showChat = useSelector((state: GlobalState) => state.behavior.showChat);
   const pasteEnabled = useSelector((state: GlobalState) => state.behavior.pasteEnabled);
+  const minCharLimit = useSelector((state: GlobalState) => state.behavior.minCharLimit);
   const inputRef = useRef<HTMLDivElement>(null!);
   const refContainer = useRef<HTMLDivElement>(null);
   const [enter, setEnter]= useState(false)
   const [firefox, setFirefox] = useState(false);
   const [height, setHeight] = useState(0);
+  const [disableSend, setDisableSend] = useState(false)
   // @ts-ignore
   useEffect(() => { if (showChat && autofocus) inputRef.current?.focus(); }, [showChat]);
   useEffect(() => { setFirefox(isFirefox())}, [])
@@ -56,10 +58,20 @@ function Sender({
   });
 
   const handlerOnChange = (event) => {
+    if (minCharLimit !== null && (inputRef.current.innerText && inputRef.current.innerText.length < minCharLimit)) {
+      setDisableSend(true)
+    } else {
+      setDisableSend(false)
+    }
     onTextInputChange && onTextInputChange(event)
   }
 
+
   const handlerSendMessage = () => {
+    if (disableSend) {
+      toast('Please tell us more')
+      return
+    }
     const el = inputRef.current;
     if(el.innerHTML) {
       sendMessage(el.innerText);
@@ -181,7 +193,6 @@ function Sender({
           contentEditable={!disabledInput}
           ref={inputRef}
           onPaste={(e) => {
-            console.log('pasting status', pasteEnabled)
             if (!pasteEnabled) {
               e.preventDefault(); toast('Pasting is disabled')
             }

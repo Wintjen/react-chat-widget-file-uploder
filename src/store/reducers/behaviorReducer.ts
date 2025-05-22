@@ -10,7 +10,9 @@ import {
   TOGGLE_MESSAGE_LOADER,
   ToggleForcedScreenRecorder,
   TOGGLE_PASTE_ENABLED,
-  TogglePasteEnabled
+  TogglePasteEnabled,
+  SetMinCharLimit,
+  SET_MIN_CHAR_LIMIT
 } from '../actions/types';
 
 const initialState = {
@@ -19,6 +21,7 @@ const initialState = {
   forcedScreenRecorder: false,
   messageLoader: false,
   pasteEnabled: true,
+  minCharLimit: null,
 };
 
 const behaviorReducer = {
@@ -27,7 +30,7 @@ const behaviorReducer = {
   [TOGGLE_INPUT_DISABLED]: (state: BehaviorState, toggle: ToggleInputDisabled) => ({ ...state, disabledInput: toggle.value }),
   [TOGGLE_FORCED_SCREEN_RECORDER]: (state: BehaviorState, toggle: ToggleForcedScreenRecorder) => ({ ...state, forcedScreenRecorder: toggle.value }),
   [TOGGLE_PASTE_ENABLED]: (state: BehaviorState, toggle: TogglePasteEnabled) => ({...state, pasteEnabled: toggle.value}),
-
+  [SET_MIN_CHAR_LIMIT]: (state: BehaviorState, minLimit: SetMinCharLimit) => ({...state, minCharLimit: minLimit.value}),
   [TOGGLE_MESSAGE_LOADER]: (state: BehaviorState) => ({ ...state, messageLoader: !state.messageLoader })
 };
 

@@ -45,6 +45,7 @@ export interface BehaviorState {
   forcedScreenRecorder: boolean;
   messageLoader: boolean;
   pasteEnabled: boolean;
+  minCharLimit: number | null;
 };
 
 export interface MessagesState {

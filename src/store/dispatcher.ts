@@ -32,6 +32,10 @@ export function togglePasteEnabled(value: boolean) {
   store.dispatch(actions.togglePasteEnabled(value));
 }
 
+export function setMinCharLimit(value: number | null) {
+  store.dispatch(actions.setMinCharLimit(value));
+}
+
 export function toggleInputDisabled(value: boolean) {
   store.dispatch(actions.toggleInputDisabled(value));
 }

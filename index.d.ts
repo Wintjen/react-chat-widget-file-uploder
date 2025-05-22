@@ -24,6 +24,7 @@ export function toggleWidget(): void;
 export function toggleInputDisabled(value: boolean): void;
 export function toggleForcedScreenRecorder(value: boolean): void;
 export function togglePasteEnabled(value: boolean): void;
+export function setMinCharLimit(value: number | null): void;
 export function dropMessages(): void;
 export function isWidgetOpened(): boolean;
 export function setQuickButtons(buttons: Array<{ label: string, value: string | number }>): void;
