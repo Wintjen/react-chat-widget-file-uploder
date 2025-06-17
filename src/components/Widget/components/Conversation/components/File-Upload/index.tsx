@@ -71,7 +71,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
 
   // const isMobile = width <= 768;
   const isMobile = getDeviceType() === 'mobile';
-console.log('isMobile', isMobile)
+
   
   useEffect(() => {
     if (files.length) {
