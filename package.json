@@ -1,6 +1,6 @@
 {
     "name": "react-chat-widget-custom",
-    "version": "1.0.64",
+    "version": "1.0.65",
     "description": "Chat web widget for React apps",
     "repository": {
         "type": "git",
@@ -11,7 +11,7 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "scripts": {
-        "start": "webpack serve --config webpack.config.dev.js",
+        "start": "webpack serve --config webpack.config.dev.js --host 0.0.0.0",
         "build": "webpack --config ./webpack.config.prod.js",
         "test": "jest --coverage"
     },
