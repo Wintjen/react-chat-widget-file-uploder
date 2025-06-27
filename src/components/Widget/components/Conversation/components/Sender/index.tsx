@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import {useRef, useEffect, useState, forwardRef, useImperativeHandle, MouseEventHandler} from 'react';
 import { useSelector } from 'react-redux';
 import cn from 'classnames';
@@ -12,7 +12,7 @@ const brRegex = /<br>/g;
 
 import './style.scss';
 import { FileUpload } from '../File-Upload';
-import { TFile } from '../File-Upload/hooks';
+import { TFile, useUploadFiles } from '../File-Upload/hooks';
 
 import toast, { Toaster } from 'react-hot-toast';
 import { Tooltip } from 'react-tooltip';
@@ -47,6 +47,8 @@ function Sender({
   const [firefox, setFirefox] = useState(false);
   const [height, setHeight] = useState(0);
   const [disableSend, setDisableSend] = useState(false)
+  const [files, setFiles] = useState<TFile[]>([])
+
   // @ts-ignore
   useEffect(() => { if (showChat && autofocus) inputRef.current?.focus(); }, [showChat]);
   useEffect(() => { setFirefox(isFirefox())}, [])
@@ -68,14 +70,15 @@ function Sender({
 
 
   const handlerSendMessage = () => {
-    if (disableSend) {
+    if (disableSend && files.length <= 0) {
       toast('Please tell us more')
       return
     }
     const el = inputRef.current;
-    if(el.innerHTML) {
-      sendMessage(el.innerText);
+    if(el.innerHTML || files.length > 0) {
+      sendMessage(el.innerText + (files ? ' ' + files.map(f => `![](${f.source})`) : ''));
       el.innerHTML = ''
+      setFiles([])
     }
   }
 
@@ -161,8 +164,15 @@ function Sender({
     onPressEmoji();
     checkSize();
   }
-  const handleFileInput = (files: { source: string }[] = []) => {
-    files.forEach((file) => sendMessage(`![](${file.source})`));
+  const handleFileInput = (fileInputRef: RefObject<HTMLInputElement>, files: { source: string }[] = []) => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+    setFiles(prevFiles => [...prevFiles, ...files])
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
   };
 
   return (
@@ -175,11 +185,16 @@ function Sender({
         </button>
       )}
       {isShowFileUploader && (
-        <FileUpload 
+        <>
+          <FileUpload 
           onClick={handleFileInput} 
           screenRecording={screenRecording} 
-          setScreenRecording={setScreenRecording} 
-        />
+          setScreenRecording={setScreenRecording}
+          files={files}
+          setFiles={setFiles}
+          />
+        </>
+        
       )}
       <div className={cn('rcw-new-message', {
           'rcw-message-disable': disabledInput,
@@ -203,6 +218,32 @@ function Sender({
           onKeyUp={handlerOnKeyUp}
           onKeyDown={handlerOnKeyDown}
         />
+        
+        {files.length > 0 && (
+          <div className="rcw-files-container">
+            {files.map((file, index) => (
+              <div key={index} className="rcw-file-item">
+                {file.file?.type?.startsWith('video/') ? (
+                  <video 
+                    src={file.source} 
+                    className="rcw-file-preview"
+                    muted
+                    preload="metadata"
+                  />
+                ) : (
+                  <img src={file.source} alt={file.file?.name || 'Uploaded file'} className="rcw-file-preview" />
+                )}
+                <button 
+                  className="rcw-file-remove"
+                  onClick={() => removeFile(index)}
+                  title="Remove file"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         
       </div>
       <button type="submit" className="rcw-send" onClick={handlerSendMessage}>

@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 
-import { TFile, useUploadFiles } from './hooks';
+import { TFile } from './hooks';
 const send = require('../../../../../../../assets/clip.svg') as string;
 const capture = require('../../../../../../../assets/video-camera-record-camera-movie-svgrepo-com.svg') as string;
 const screenRecordIcon = require('../../../../../../../assets/screen-alt-svgrepo-com.svg') as string;
@@ -20,9 +20,11 @@ import { useSelector } from 'react-redux';
 ReactModal.setAppElement('#root');
 
 type Props = {
-  onClick: (e: any) => void;
+  onClick: (inputRef: RefObject<HTMLInputElement>, e: any) => void;
   screenRecording: boolean;
   setScreenRecording: (e: boolean) => void;
+  files: TFile[];
+  setFiles: React.Dispatch<React.SetStateAction<TFile[]>>;
 };
 
 const getSupportedMimeType = () => {
@@ -39,12 +41,12 @@ const getSupportedMimeType = () => {
   }) || '';
 };
 
-export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScreenRecording }) => {
-  const [files, selectFiles, deleteFile, handleBlob] = useUploadFiles();
+export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScreenRecording, files, setFiles }) => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [isOpen, setIsOpen] = useState(false)
   const [blob, setBlob] = useState<Blob>();
   const [shouldInitializeWebcam, setShouldInitializeWebcam] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
@@ -72,18 +74,59 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
   // const isMobile = width <= 768;
   const isMobile = getDeviceType() === 'mobile';
 
-  
-  useEffect(() => {
-    if (files.length) {
-      onClick(files);
-    }
-  }, [files]);
+  // File selection handler
+  const handleSelectFiles = async (event: { target: HTMLInputElement }) => {
+    const fileList = event.target.files;
+    if (!fileList) return;
+    const result: TFile[] = [];
+    await [...fileList].reduce(async (promise, file) => {
+      await promise;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      return new Promise((resolve) => {
+        reader.onload = function () {
+          result.push({
+            source: reader.result as string,
+            file,
+          });
+          resolve();
+        };
+      });
+    }, Promise.resolve());
+    // setFiles(result);
+    onClick(fileInputRef, result);
+  };
 
+  // Blob handler
   useEffect(() => {
     if(blob) {
-      handleBlob(blob)
+      (async () => {
+        let day = new Date()
+        let time = new Date().getTime()
+        let file = new File([blob], `${day.toDateString().replaceAll(' ', '_') + time}.mp4`, { type: "video/mp4", lastModified: new Date().getTime() });
+        let container = new DataTransfer();
+        container.items.add(file);
+        const fileList = container.files;
+        const result: TFile[] = [];
+        await [...fileList].reduce(async (promise, file) => {
+          await promise;
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          return new Promise((resolve) => {
+            reader.onload = function () {
+              result.push({
+                source: reader.result as string,
+                file,
+              });
+              resolve();
+            };
+          });
+        }, Promise.resolve());
+        // setFiles(result);
+        onClick(fileInputRef, result);
+      })();
     }
-  }, [blob])
+  }, [blob]);
 
   const updateOpen = () => {
     setIsOpen(!isOpen)
@@ -95,7 +138,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
       .then(blob => {
         const mimeType = blob.type || 'video/mp4';
         const videoBlob = new Blob([blob], { type: mimeType });
-        handleBlob(videoBlob);
+        setBlob(videoBlob);
       })
       .catch(error => {
         console.error('Error processing video:', error);
@@ -217,7 +260,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
             <img src={send} />
           </label>
           <Tooltip id="upload-photo-tooltip" content="Upload a Photo or Video" place='top' style={{ zIndex: 9999 }} />
-          <input accept="image/*,video/*" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
+          <input ref={fileInputRef} accept="image/*,video/*" onChange={handleSelectFiles} type="file" multiple name="file" id="upload-photo" />
         </div>
       )}
       {!isMobile ? (
@@ -246,7 +289,7 @@ export const FileUpload: React.FC<Props> = ({ onClick, screenRecording, setScree
               <label htmlFor="upload-photo">
                 <img src={capture} />
               </label>
-              <input accept="image/*,video/*" capture="environment" onChange={selectFiles} type="file" multiple name="file" id="upload-photo" />
+              <input accept="image/*,video/*" capture="environment" onChange={handleSelectFiles} type="file" multiple name="file" id="upload-photo" />
             </div>
           )}
         </>

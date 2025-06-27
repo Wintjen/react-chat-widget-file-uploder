@@ -100,8 +100,18 @@ function Widget({
       handleSubmit?.(userInput);
       dispatch(addUserMessage(userInput));
       handleNewUserMessage(userInput);
-      const base64Source = userInput.slice(userInput.indexOf('(') + 1, userInput.lastIndexOf(')'))
-      renderCustomComponent(sendVideo, {userInput: base64Source});
+      // const base64Source = userInput.slice(userInput.indexOf('(') + 1, userInput.lastIndexOf(')'))
+      // renderCustomComponent(sendVideo, {userInput: base64Source});
+      let userText = userInput.replace(/!\[\]\(data:video[^)]*\)/g, '').replace(/^,|,$/g, '').trim();
+      const videoMatches = [...userInput.matchAll(/!\[\]\(data:video(.*?)\)/g)].map(m => "data:video" + m[1]);
+      videoMatches.forEach(match => {
+        renderCustomComponent(sendVideo, {userInput: match});
+      })
+      if (userText.trim() !== "" && userText.length > 0) {
+        handleSubmit?.(userText);
+        dispatch(addUserMessage(userText));
+        handleNewUserMessage(userText);
+      }
     } else {
       handleSubmit?.(userInput);
       dispatch(addUserMessage(userInput));
