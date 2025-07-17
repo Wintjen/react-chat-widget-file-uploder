@@ -108,7 +108,6 @@ function Widget({
         renderCustomComponent(sendVideo, {userInput: match});
       })
       if (userText.trim() !== "" && userText.length > 0) {
-        handleSubmit?.(userText);
         dispatch(addUserMessage(userText));
         handleNewUserMessage(userText);
       }

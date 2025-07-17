@@ -37,7 +37,6 @@ export type TFile = {
 
 export const useUploadFiles = (): TUseUploadFilesReturn => {
 	const [files, setFiles] = useState<TFile[]>([]);
-	console.log('files in the main thing', files)
 	const selectFilesWrapper = useCallback((event: { target: HTMLInputElement; }) => {
 		(async () => {
 			const uploadFiles = await validateUploadFiles(event.target.files);
