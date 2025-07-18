@@ -97,9 +97,9 @@ function Widget({
     }
     if (userInput.includes('data:video')) { 
       const id = userInput
-      handleSubmit?.(userInput);
-      dispatch(addUserMessage(userInput));
-      handleNewUserMessage(userInput);
+      //handleSubmit?.(userInput);
+      //dispatch(addUserMessage(userInput));
+      //handleNewUserMessage(userInput);
       // const base64Source = userInput.slice(userInput.indexOf('(') + 1, userInput.lastIndexOf(')'))
       // renderCustomComponent(sendVideo, {userInput: base64Source});
       let userText = userInput.replace(/!\[\]\(data:video[^)]*\)/g, '').replace(/^,|,$/g, '').trim();
@@ -109,8 +109,9 @@ function Widget({
       })
       if (userText.trim() !== "" && userText.length > 0) {
         dispatch(addUserMessage(userText));
-        handleNewUserMessage(userText);
       }
+      handleNewUserMessage(userInput);
+      handleSubmit?.(userInput);
     } else {
       handleSubmit?.(userInput);
       dispatch(addUserMessage(userInput));
